@@ -1,0 +1,1 @@
+<h1 class="absolute top-1/4">diary</h1>
