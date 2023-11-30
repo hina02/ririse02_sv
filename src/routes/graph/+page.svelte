@@ -5,13 +5,15 @@
     let pageTitle = "graph";
 
     import { onMount } from 'svelte';
-    import { getTriplets } from '$lib/Cytoscape/gettriplets.ts';
+    import { getAllNodes, getAllEdges, getTriplets } from '$lib/Cytoscape/gettriplets.ts';
 
     // sample text for cytoscpe
     const text = "Tom is an engineer";
     onMount(async () => {
-        const triplets = await getTriplets(backendUrl, text);
-        console.log(triplets);
+        await getAllNodes(backendUrl);
+        await getAllEdges(backendUrl);
     });
+
 </script>
-<Cytoscape />
+<Cytoscape {backendUrl} />
+```
