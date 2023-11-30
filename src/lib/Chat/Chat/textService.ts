@@ -10,7 +10,7 @@ export default {
 
             callback(char === '\n' ? "\n" : char);
 
-            setTimeout(() => this.addCharacter(text, type, callback), 100);
+            setTimeout(() => this.addCharacter(text, type, callback), 500);
         }
     }
 };

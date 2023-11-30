@@ -24,6 +24,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"cytoscape": "^3.27.0",
 		"svelte-file-dropzone": "^2.0.2",
 		"zod": "^3.22.4"
 	}
