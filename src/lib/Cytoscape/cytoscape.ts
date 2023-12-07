@@ -33,7 +33,7 @@ export function initializeBasicCytoscape(container: HTMLElement): Core {
   });
 }
 
-export function drawNodesAndEdges(nodes: NodeSchemaType[], relationships: RelationshipsSchemaType[], cy: cytoscape.Core) {
+export function drawNodesAndEdges(nodes: NodeSchemaType[], relationships: RelationshipsSchemaType[], cy: cytoscape.Core, layoutName: string) {
   const cytoscapeData = {
     nodes: [],
     edges: []
@@ -91,7 +91,7 @@ export function drawNodesAndEdges(nodes: NodeSchemaType[], relationships: Relati
 
   cy.elements().remove();
   cy.add(cytoscapeData);
-  cy.layout({ name: 'circle' }).run();
+  cy.layout({ name: layoutName }).run();
 }
 
 

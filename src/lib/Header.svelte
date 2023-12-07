@@ -13,7 +13,6 @@
 		<div class="flex space-x-6">
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/diary">Diary</HeaderLink>
-			<HeaderLink href="/graph">Graph</HeaderLink>
 			<HeaderLink href="/thread">Thread</HeaderLink>
 		</div>
 		<div>

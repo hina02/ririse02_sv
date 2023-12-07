@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { Nodes, Relationships, Triplets } from './Store';
-  import { getTriplets, updateAllNodes, updateAllEdges } from './getTriplets';
+  import { getAllNodes, getAllEdges, getTriplets, updateAllNodes, updateAllEdges } from './getTriplets';
   import { initializeBasicCytoscape, drawNodesAndEdges, changeTripletsColor } from '../cytoscape';
   import type { Core } from 'cytoscape';
 
@@ -18,7 +18,7 @@
       if (nodes) {
         Relationships.subscribe(relationships => {
           if (relationships) {
-          drawNodesAndEdges(nodes, relationships, cy);
+          drawNodesAndEdges(nodes, relationships, cy, "circle");  // or "grid", "random"
           isLoading = false; // データがロードされたら、ローディングステートを更新
           }
         });
@@ -42,6 +42,8 @@
   
   // 最初にすべてのノードとエッジを描画
   onMount(async () => {
+    await getAllNodes(backendUrl);
+    await getAllEdges(backendUrl);
     cy = initializeBasicCytoscape(container);
     drawAllNodesAndEdges();
   });
@@ -54,12 +56,13 @@
   });
 
   </script>
-  <div class="absolute top-40 left-20 w-96 h-96 bg-gray-100">
+  <div class="w-96 h-96 bg-gray-100">
+    <p class="flex px-4 justify-center">Entity Node</p>
     {#if isLoading} <!-- ローディングインジケーターを表示 -->
       <div class="h-full">Loading...</div>
     {/if}
     <div bind:this={container} class="h-full"></div>
-    <div class="flex justify-center space-x-6">
+    <div class="flex justify-center space-x-12 pl-12 lg:pl-0">
       <button on:click={async () => await getTriplets(backendUrl, "Tom is an engineer")} class="btn-default">get triplets</button>
       <!-- update all nodes and edges -->
       <button on:click={async () => { await updateAllNodes(backendUrl); await updateAllEdges(backendUrl); }} class="btn-default">update all</button>

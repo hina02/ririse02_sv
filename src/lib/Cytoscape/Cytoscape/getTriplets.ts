@@ -29,15 +29,13 @@ export async function getAllEdges(backendUrl: string) {
 // update All Nodes
 export async function updateAllNodes(backendUrl: string) {
     let nodes: NodeSchemaType[] = await fetch(`${backendUrl}/chat_wb/all_nodes`).then(r => r.json());
-    console.log(`nodes: ${JSON.stringify(nodes, null, 2)}`)
-    console.log(`nodes length: ${nodes.length}`)
+    console.log(`entity nodes length: ${nodes.length}`)
     Nodes.set(nodes);
 }
 
 // update All Relationships
 export async function updateAllEdges(backendUrl: string) {
     let edges: RelationshipsSchemaType[] = await fetch(`${backendUrl}/chat_wb/all_relationships`).then(r => r.json());
-    console.log(`edges: ${JSON.stringify(edges, null, 2)}`)
-    console.log(`edges length: ${edges.length}`)
+    console.log(`entity edges length: ${edges.length}`)
     Relationships.set(edges);
 }

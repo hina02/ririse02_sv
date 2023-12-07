@@ -45,7 +45,14 @@
 			onOpen: (event: Event) => {
 				// メッセージの送信
 				systemMessage = "システム: WebSocketが開かれました。";
+
+				// 仮のuser, AI, sourceを設定
+				const user = "彩澄しゅお";
+				const AI = "彩澄りりせ";
 				const data = {
+							user: user,
+							AI: AI,
+							source: user,
 							input_text: inputText,
 							title: $activeTitle,
 							};				
@@ -99,7 +106,7 @@
 
 
 </script>
-<div class="h-2/5 sm:h-1/2 max-w-4xl min-w-screen w-full fixed bottom-0">
+<div class="h-1/4 sm:h-1/3 max-w-4xl min-w-screen w-full fixed bottom-0">
 	<!-- title -->
 	<div class="absolute bottom-full w-full mb-2 flex justify-center space-x-4">
 		<select bind:value={selectedTitle} on:change={() => activeTitle.set(selectedTitle)}>
@@ -109,7 +116,7 @@
 			{/each}
 		</select>
     </div>
-	<!-- messagde container -->
+	<!-- message container -->
 	<div class="h-full px-4 py-2 bg-sky-50 opacity-95 text-center text-gray-500 lg:left-72">
 		<div class="h-full flex flex-col">
 			<div class="flex-none">
