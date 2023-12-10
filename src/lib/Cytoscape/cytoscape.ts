@@ -95,7 +95,7 @@ export function drawNodesAndEdges(nodes: NodeSchemaType[], relationships: Relati
 }
 
 
-export function changeTripletsColor(triplets: TripletsSchemaType, cy: cytoscape.Core) {
+export function activateColor(triplets: TripletsSchemaType, cy: cytoscape.Core) {
     // 色を変更するノードのIDを取得
     triplets.nodes.forEach(node => {
         const nodeId = node.name;

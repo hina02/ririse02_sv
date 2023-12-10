@@ -1,53 +1,56 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { Nodes, Relationships, Triplets } from './Store';
-  import { getAllNodes, getAllEdges, getTriplets, updateAllNodes, updateAllEdges } from './getTriplets';
-  import { initializeBasicCytoscape, drawNodesAndEdges, changeTripletsColor } from '../cytoscape';
+  import { ShortMemory, ActivatedMemory } from './Store';
+  import { getMemory } from './memoryService';
+  import { initializeBasicCytoscape, drawNodesAndEdges, activateColor } from '../cytoscape';
   import type { Core } from 'cytoscape';
 
   export let backendUrl: string;
   let cy: Core;
   let container: HTMLElement;
   let unsubscribeAll: () => void;
-  let unsubscribeTriplets; 
+  let unsubscribeActivatedMemory; 
   let isLoading = true; // ローディングステートを初期化
 
-  // すべてのノードとエッジを描画
-  async function drawAllNodesAndEdges() {
-  unsubscribeAll = await Nodes.subscribe(nodes => {
-      if (nodes) {
-        Relationships.subscribe(relationships => {
-          if (relationships) {
-          drawNodesAndEdges(nodes, relationships, cy, "circle");  // or "grid", "random"
-          isLoading = false; // データがロードされたら、ローディングステートを更新
-          }
-        });
-      }
-    })
-  }
+  let query: string = "Tom is an engineer"
 
-  // Tripletsのデータが更新されたとき、該当するノードとエッジの色を変更
-  function drawTriplets() {  
-    unsubscribeTriplets = Triplets.subscribe(triplets => {
-      if (triplets.nodes && triplets.relationships) {
-        changeTripletsColor(triplets, cy);
+  // ActivatedMemoryのデータが更新されたとき、該当するノードとエッジの色を変更
+  function drawActivatedMemory() {
+    if (cy) {
+      // 全てのノードとエッジの色をデフォルトに戻す
+      cy.style().selector('node').style({
+        'background-color': '#666'
+      });
+
+      cy.style().selector('edge').style({
+        'line-color': '#ccc',
+        'target-arrow-color': '#ccc'
+      });
+    }
+    // 該当するノードとエッジの色を変更
+    unsubscribeActivatedMemory = ActivatedMemory.subscribe(activatedmemory => {
+      if (activatedmemory.nodes && activatedmemory.relationships) {
+        activateColor(activatedmemory, cy);
       }
     });
   }
 
-  // Tripletsのデータが更新されたとき、該当するノードとエッジの色を変更
-  Triplets.subscribe(() => {
-    drawTriplets();
-  });
+  // ActivatedMemoryのデータが更新されたとき、該当するノードとエッジの色を変更
+  $: if (ActivatedMemory) {
+    drawActivatedMemory();
+  }
   
-  // 最初にすべてのノードとエッジを描画
+  // 最初にcytoscapeを初期化
   onMount(async () => {
-    await getAllNodes(backendUrl);
-    await getAllEdges(backendUrl);
     cy = initializeBasicCytoscape(container);
-    drawAllNodesAndEdges();
   });
-  
+
+  // ShortMemoryが更新されると、ノードとエッジの描画を更新
+  $: if ($ShortMemory && $ShortMemory.nodes && $ShortMemory.relationships) {
+    drawNodesAndEdges($ShortMemory.nodes, $ShortMemory.relationships, cy, "circle");  // or "grid", "random"
+    isLoading = false; // データがロードされたら、ローディングステートを更新
+  }
+
   // ページを離れるとき、監視を解除
   onDestroy(() => {
     if (unsubscribeAll) {
@@ -63,9 +66,8 @@
     {/if}
     <div bind:this={container} class="h-full"></div>
     <div class="flex justify-center space-x-12 pl-12 lg:pl-0">
-      <button on:click={async () => await getTriplets(backendUrl, "Tom is an engineer")} class="btn-default">get triplets</button>
-      <!-- update all nodes and edges -->
-      <button on:click={async () => { await updateAllNodes(backendUrl); await updateAllEdges(backendUrl); }} class="btn-default">update all</button>
+      <button on:click={async () => await getMemory(backendUrl, query)} class="btn-default">get triplets</button>
+
     </div>
   </div>
   

@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { MessageNodes, MessageRelationships } from './Store';
   import { getMessageNodes, getMessageEdges, updateMessageNodes, updateMessageEdges } from './getMessage';
-  import { initializeBasicCytoscape, drawNodesAndEdges, changeTripletsColor } from '../cytoscape';
+  import { initializeBasicCytoscape, drawNodesAndEdges } from '../cytoscape';
   import { activeTitle } from '$lib/Chat/History/chatStore';
   import type { Core } from 'cytoscape';
 
@@ -30,13 +30,14 @@
     })
   }
 
-// 最初にすべてのノードとエッジを描画
+  // 最初にcytoscapeを初期化
   onMount(async () => {
     cy = initializeBasicCytoscape(container);
     drawAllNodesAndEdges();
   });
 
-  $: if ($activeTitle) {
+  // Titleを指定すると、メッセージのノードとエッジを更新
+  $: if ($activeTitle && $activeTitle !== "new") {
     updateMessageNodes(backendUrl, $activeTitle);
     updateMessageEdges(backendUrl, $activeTitle);
   }
