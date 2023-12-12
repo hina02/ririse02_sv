@@ -1,5 +1,6 @@
 import { get } from 'svelte/store'; // 追加: ストアの現在の値を取得するため
-import { Titles, Messages, activeTitle} from './chatStore.js';
+import { Titles } from '$lib/Chat/Chat/Store.js';
+import { Messages } from './chatStore.js';
 
 export async function getTitles(backendUrl: string) {
     const currentTitles = get(Titles); // 現在のTitlesの値を取得

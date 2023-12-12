@@ -3,7 +3,7 @@
   import { MessageNodes, MessageRelationships } from './Store';
   import { getMessageNodes, getMessageEdges, updateMessageNodes, updateMessageEdges } from './getMessage';
   import { initializeBasicCytoscape, drawNodesAndEdges } from '../cytoscape';
-  import { activeTitle } from '$lib/Chat/History/chatStore';
+  import { activeTitle } from '$lib/Chat/Chat/Store';
   import type { Core } from 'cytoscape';
 
   export let backendUrl: string;

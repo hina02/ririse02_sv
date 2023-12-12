@@ -2,8 +2,7 @@
     // Chat
     import Ririse from "$lib/Ririse.svelte";
     import Chatwb from '$lib/Chat/Chat.svelte';
-    import History from '$lib/Chat/History/History.svelte';
-    import Settings from '$lib/Chat/Settings/Settings.svelte';
+    import Settings from '$lib/Chat/Settings/Setting.svelte';
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     let pageTitle = "home";
@@ -18,7 +17,6 @@
 </svelte:head>
 
 <Ririse />
-<History {backendUrl}/>
 <Settings {backendUrl}/>
 <Chatwb {backendUrl}/>
 

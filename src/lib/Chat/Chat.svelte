@@ -5,8 +5,8 @@
 	import audioService from './Chat/audioService';
 	import { handleShortMemory, handleActivatedMemory } from '$lib/Cytoscape/Cytoscape/memoryService';
 	// import hljs from '../../css/my-highlight.js'
-	import { Titles, activeTitle, Messages} from './History/chatStore.ts';
-	import { createTitle } from './History/getChatHistory';
+	import { Titles, activeTitle } from './Chat/Store';
+	import { createTitle } from './Settings/History/getChatHistory';
 	let selectedTitle: string;	// タイトルの選択
 	let scrollContainer: HTMLElement;	// メッセージ表示欄のDOM要素
 

@@ -44,7 +44,7 @@
 <div>
   <input type="text" bind:value={newKey} placeholder="Key" class="mt-2 p-2 border rounded" />
   <input type="text" bind:value={newValue} placeholder="Value" class="mt-2 p-2 border rounded" />
-  <button on:click={addDictItem} class="mt-2 p-2 border rounded bg-blue-500 text-white">Add</button>
+  <button on:click={addDictItem} class="btn-default">Add</button>
 
   <div class="flex flex-col mt-2 space-y-0.5">
     {#each Object.entries(dict) as [key, value]}

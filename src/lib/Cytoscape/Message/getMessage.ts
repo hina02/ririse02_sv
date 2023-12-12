@@ -1,7 +1,7 @@
 import { get } from 'svelte/store'; // 追加: ストアの現在の値を取得するため
 import type { NodeSchemaType, RelationshipsSchemaType } from '../Schema';
 import { MessageNodes, MessageRelationships } from './Store';
-import { activeTitle } from '$lib/Chat/History/chatStore';
+import { activeTitle } from '$lib/Chat/Chat/Store';
 
 // get message nodes
 export async function getMessageNodes(backendUrl: string) {
