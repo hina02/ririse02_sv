@@ -8,10 +8,13 @@
     import MessageView from '$lib/Thread/Message/MessageView.svelte';
     import MessageComposer from '$lib/Thread/Message/MessageComposer.svelte';
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
-    // その他のスクリプト...
+    let pageTitle = 'thread';
 </script>
-  
+
 <!-- ここにHTMLコンテンツを追加 -->
+<svelte:head>
+    <title>{pageTitle}</title>
+</svelte:head>
 <!-- レスポンシブコンテナ -->
 <div class="grid min-h-screen gap-6 p-8 md:grid-cols-3 bg-blue-50 dark:bg-blue-900">
     <!-- サイドバー -->

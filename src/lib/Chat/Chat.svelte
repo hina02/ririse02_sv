@@ -51,7 +51,7 @@
   
 	function sendMessage(): void {
 		// activeTitleがない場合、送信しない
-		if (!$activeTitle) {
+		if (!$activeTitle || $activeTitle === 'new') {
 			systemMessage = "System: Titleを選択してください。";
 			return;
 		}

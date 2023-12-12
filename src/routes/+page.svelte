@@ -3,6 +3,7 @@
     import Ririse from "$lib/Ririse.svelte";
     import Chatwb from '$lib/Chat/Chat.svelte';
     import History from '$lib/Chat/History/History.svelte';
+    import Settings from '$lib/Chat/Settings/Settings.svelte';
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     let pageTitle = "home";
@@ -12,9 +13,13 @@
     import CyMessage from '$lib/Cytoscape/Message/CytoscapeMessage.svelte';
 
 </script>
+<svelte:head>
+    <title>{pageTitle}</title>
+</svelte:head>
 
 <Ririse />
 <History {backendUrl}/>
+<Settings {backendUrl}/>
 <Chatwb {backendUrl}/>
 
 <div class="absolute top-16 left-16 flex justify-between space-x-8 lg:space-x-10 -z-20">    
