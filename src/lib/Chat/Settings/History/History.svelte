@@ -1,17 +1,11 @@
 <!-- Historyとして、Title listを表示。デフォルトは今のTitle。expandで、Titleに紐づくMessageを表示。 -->
 <script lang="ts">
-import { onMount } from 'svelte';
 import { Titles, activeTitle } from '$lib/Chat/Chat/Store.js';
 import { Messages } from './chatStore.js';
-import { getTitles, getMessages } from './getChatHistory.js';
+import { getMessages } from './getChatHistory.js';
 
 export let backendUrl: string;
 
-
-// チャットタイトルの取得
-onMount(() => {
-    getTitles(backendUrl);
-});
 
 // activeTitleが変わったときにgetMessagesをトリガー
 $: if ($activeTitle) {
@@ -22,12 +16,12 @@ $: if ($activeTitle) {
 
 
 <!-- iconをクリックして表示するhistory欄 -->
-<div class="w-96 h-full p-4">
+<div class="w-80 h-full p-4">
     <h1 class="text-xl font-semibold text-gray-800">Chat History</h1>
     <div class="my-2">
         {#each $Titles as title}
             <!-- クリックした時に、titleをactiveにする -->
-            <details on:toggle={() => activeTitle.set(title)} class="max-h-96 overflow-y-auto p-1">
+            <details on:toggle={() => activeTitle.set(title)} class="max-h-80 overflow-y-auto p-1">
                 <summary class="overflow-x-hidden">{title}</summary>                
                 {#if $activeTitle === title}
                 <!-- メッセージをロード中であることを示す -->
@@ -42,11 +36,15 @@ $: if ($activeTitle) {
                             <th>Message</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody  class="text-xs">
                         {#each $Messages[title] as message}
                         <tr>
-                            <td>{message.created_at}</td>
-                            <td><strong>{message.role}:</strong> {message.content}</td>
+                            <td>{message.create_time.toLocaleString('ja-JP')}</td>
+                            <td><strong>{message.source}:</strong> {message.user_input}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><strong>{message.AI}:</strong> {message.ai_response}</td>
                         </tr>
                         {/each}
                     </tbody>

@@ -20,6 +20,17 @@ export const TripletsSchema = z.object({
   relationships: z.array(RelationshipsSchema)
 });
 
+export const MessageSchema = z.object({
+	id: z.number(),
+	source: z.string(),
+  user_input: z.string(),
+  AI: z.string().nullable().optional(),
+  ai_response: z.string(),
+  user_input_entity: z.array(TripletsSchema),
+  create_time: z.date()
+});
+
 export type NodeSchemaType = z.infer<typeof NodeSchema>;
 export type RelationshipsSchemaType = z.infer<typeof RelationshipsSchema>;
 export type TripletsSchemaType = z.infer<typeof TripletsSchema>;
+export type MessageSchemaType = z.infer<typeof MessageSchema>;

@@ -1,5 +1,5 @@
 import cytoscape, { Core } from 'cytoscape';
-import type { NodeSchemaType, RelationshipsSchemaType, TripletsSchemaType } from './Schema.ts';
+import type { NodeSchemaType, RelationshipsSchemaType, TripletsSchemaType } from '$lib/Chat/Schema.js';
 
 
 export function initializeBasicCytoscape(container: HTMLElement): Core {

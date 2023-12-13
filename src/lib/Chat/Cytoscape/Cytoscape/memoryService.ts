@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
-import { TripletsSchema } from '../Schema.js';
-import type { NodeSchemaType, RelationshipsSchemaType, TripletsSchemaType } from '../Schema.js';
+import { TripletsSchema } from '$lib/Chat/Schema.js';
+import type { TripletsSchemaType } from '$lib/Chat/Schema.js';
 import { ShortMemory, ActivatedMemory } from './Store.js';
 import { ParseStatus } from 'zod';
 

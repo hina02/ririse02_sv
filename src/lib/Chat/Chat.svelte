@@ -3,10 +3,10 @@
 	import websocketService from './Chat/websocketService';
 	import textService from './Chat/textService';
 	import audioService from './Chat/audioService';
-	import { handleShortMemory, handleActivatedMemory } from '$lib/Cytoscape/Cytoscape/memoryService';
+	import { handleShortMemory, handleActivatedMemory } from '$lib/Chat/Cytoscape/Cytoscape/memoryService';
 	// import hljs from '../../css/my-highlight.js'
 	import { Titles, activeTitle } from './Chat/Store';
-	import { createTitle } from './Settings/History/getChatHistory';
+	import { createTitle, getTitles } from './Settings/History/getChatHistory';
 	let selectedTitle: string;	// タイトルの選択
 	let scrollContainer: HTMLElement;	// メッセージ表示欄のDOM要素
 
@@ -125,8 +125,11 @@
 	}
 
 	onMount(() => {
-    document.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightBlock(block);
+		// タイトルの取得
+		getTitles(backendUrl);
+		// ハイライトの適用
+    	document.querySelectorAll('pre code').forEach((block) => {
+      	hljs.highlightBlock(block);
     });
   });
 

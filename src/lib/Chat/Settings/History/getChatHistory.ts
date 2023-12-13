@@ -1,6 +1,7 @@
 import { get } from 'svelte/store'; // 追加: ストアの現在の値を取得するため
 import { Titles } from '$lib/Chat/Chat/Store.js';
 import { Messages } from './chatStore.js';
+import { MessageSchema, TripletsSchema } from '$lib/Chat/Schema.js';
 
 export async function getTitles(backendUrl: string) {
     const currentTitles = get(Titles); // 現在のTitlesの値を取得
@@ -33,8 +34,14 @@ export async function getMessages(backendUrl: string, title: string) {
     // ストアにメッセージがない場合、バックエンドから指定Titleに関連するMessageノードの中身を取得
     if (!currentMessages[title]) {
         const messages = await fetch(`${backendUrl}/chat_wb/get_messages?title=${title}`).then(r => r.json());
+        // messagesをmessageのリストとして、parse
+        const validatedMessages = messages.map((message: any) => {
+            message.user_input_entity = [JSON.parse(message.user_input_entity)];
+            message.create_time = new Date(message.create_time);
+            return MessageSchema.parse(message);
+        });
         Messages.update(allMessages => {
-            allMessages[title] = messages;
+            allMessages[title] = validatedMessages;
             return allMessages;
         });
     }    

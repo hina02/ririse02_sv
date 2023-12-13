@@ -1,5 +1,5 @@
 import { get } from 'svelte/store'; // 追加: ストアの現在の値を取得するため
-import type { NodeSchemaType, RelationshipsSchemaType } from '../Schema';
+import type { NodeSchemaType, RelationshipsSchemaType } from '$lib/Chat/Schema';
 import { MessageNodes, MessageRelationships } from './Store';
 import { activeTitle } from '$lib/Chat/Chat/Store';
 

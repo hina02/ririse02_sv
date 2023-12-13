@@ -50,7 +50,7 @@
   });
 
   </script>
-  <div class="w-96 h-96 bg-gray-100">
+  <div class="w-96 h-[32rem] bg-gray-100">
     <p class="flex justify-center px-4">Message Node</p>
     {#if isLoading} <!-- ローディングインジケーターを表示 -->
       <div class="h-full">Loading...</div>

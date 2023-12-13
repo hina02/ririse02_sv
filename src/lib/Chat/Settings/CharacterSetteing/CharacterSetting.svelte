@@ -16,7 +16,7 @@
   const modal = writable(null);
   const showModal = (value: any) => modal.set(bind(PopupModal, { value: value }));
 
-  async function handleSubmit() {
+  async function updateCharacter() {
     // request
     new_properties = { ...properties, "name_variation": name_variation, "speech_pattern": speech_pattern };
     let NodeData = NodeSchema.parse({label: "Person", name: name, properties: new_properties});
@@ -82,7 +82,7 @@
     </Modal>
   </div>
   <div class="grid grid-cols-6">
-    <button type="submit" class="btn-default" on:click={handleSubmit}>Submit</button>
+    <button type="submit" class="btn-default" on:click={updateCharacter}>Submit</button>
     <div class="col-start-3 col-span-2">
       {#if promise}
           {#await promise then value}
