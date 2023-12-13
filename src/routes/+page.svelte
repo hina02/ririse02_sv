@@ -8,7 +8,7 @@
     let pageTitle = "home";
 
     // Cytoscape
-    import Cytoscape from '$lib/Chat/Cytoscape/Cytoscape/Cytoscape.svelte';
+    import Cytoscape from '$lib/Chat/Cytoscape/Memory/CytoscapeMemory.svelte';
     import CyMessage from '$lib/Chat/Cytoscape/Message/CytoscapeMessage.svelte';
 
 </script>

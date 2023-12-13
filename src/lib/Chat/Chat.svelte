@@ -3,9 +3,9 @@
 	import websocketService from './Chat/websocketService';
 	import textService from './Chat/textService';
 	import audioService from './Chat/audioService';
-	import { handleShortMemory, handleActivatedMemory } from '$lib/Chat/Cytoscape/Cytoscape/memoryService';
+	import { handleShortMemory, handleActivatedMemory } from '$lib/Chat/Cytoscape/Memory/memoryService';
 	// import hljs from '../../css/my-highlight.js'
-	import { Titles, activeTitle } from './Chat/Store';
+	import { Titles, activeTitle, user, AI } from './Chat/Store';
 	import { createTitle, getTitles } from './Settings/History/getChatHistory';
 	let selectedTitle: string;	// タイトルの選択
 	let scrollContainer: HTMLElement;	// メッセージ表示欄のDOM要素
@@ -18,7 +18,7 @@
 	let inputText:string = "";	// 入力文字
 
 	let responseText:string = '';	//　addCharacter: レスポンスのストリーム表示
-    let responseMessages:string = `りりせ: `;
+    let responseMessages:string = `${$AI}: `;
 	let codeMessages: string[] = [];	//　コードの表示
     let index:number = 0;
 	
@@ -61,19 +61,16 @@
 				// メッセージの送信
 				systemMessage = "System: WebSocketが開かれました。";
 
-				// 仮のuser, AI, sourceを設定
-				const user = "彩澄しゅお";
-				const AI = "彩澄りりせ";
 				const data = {
-							user: user,
-							AI: AI,
-							source: user,
+							user: $user,
+							AI: $AI,
+							source: $user,	// 仮のsource。Assistantも受け取るようにする。
 							input_text: inputText,
 							title: $activeTitle,
 							};				
 				socket.send(JSON.stringify(data));
 				// 変数の初期化
-				responseMessages = `りりせ: `;
+				responseMessages = `${$AI}: `;
 				codeMessages = [];	
 				inputText = "";
 			},

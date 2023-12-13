@@ -1,6 +1,8 @@
 <script lang="ts">
     import History from '$lib/Chat/Settings/History/History.svelte';
     import CharacterSettings from '$lib/Chat/Settings/CharacterSetteing/CharacterSetting.svelte';
+    import CharacterIntegrate from '$lib/Chat/Settings/CharacterIntegrate/CharacterIntegrate.svelte';
+    import CharacterSelect from '$lib/Chat/Settings/CharacterSelect/CharacterSelect.svelte';
     export let backendUrl: string;
 
     // メニュー全体の表示
@@ -35,14 +37,18 @@
             <button on:click={() => {setActiveMenu('character')}} class={`border-b-2 ${activeMenu.startsWith('character') ? 'border-blue-300' : ''}`}>キャラクター</button>
             <div class={`flex justify-center mx-auto pt-1 space-x-6 ${activeMenu.startsWith('character') ? '' : 'hidden'}`}>
                 <button on:click={() => setActiveMenu('characterselect')} class={`border-b-2 ${activeMenu === 'characterselect' ? 'border-blue-300' : ''}`}>選択</button>
-                <button on:click={() => setActiveMenu('charactersettings')} class={`border-b-2 ${activeMenu === 'charactersettings' ? 'border-blue-300' : ''}`}>設定</button>
+                <button on:click={() => setActiveMenu('charactersetting')} class={`border-b-2 ${activeMenu === 'charactersetting' ? 'border-blue-300' : ''}`}>設定</button>
                 <button on:click={() => setActiveMenu('characterintegrate')} class={`border-b-2 ${activeMenu === 'characterintegrate' ? 'border-blue-300' : ''}`}>統合</button>
             </div>
         </div>
         {#if activeMenu === 'history'}
             <History backendUrl={backendUrl}/>
-        {:else if activeMenu === 'charactersettings'}
+        {:else if activeMenu === 'charactersetting'}
             <CharacterSettings backendUrl={backendUrl}/>
+        {:else if activeMenu === 'characterintegrate'}
+            <CharacterIntegrate backendUrl={backendUrl}/>
+        {:else if activeMenu === 'characterselect'}
+            <CharacterSelect backendUrl={backendUrl}/>
         {/if}
     </div>
 </div>
