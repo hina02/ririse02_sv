@@ -3,7 +3,7 @@
 	import websocketService from './Chat/websocketService';
 	import textService from './Chat/textService';
 	import audioService from './Chat/audioService';
-	import { handleShortMemory, handleActivatedMemory } from '$lib/Chat/Cytoscape/Memory/memoryService';
+	import { handleShortMemory, handleMessageRetrievedMemory } from '$lib/Chat/Cytoscape/Memory/memoryService';
 	// import hljs from '../../css/my-highlight.js'
 	import { Titles, activeTitle, user, AI } from './Chat/Store';
 	import { createTitle, getTitles } from './Settings/History/getChatHistory';
@@ -101,9 +101,9 @@
 						socket.close();
 					}
 					break;
-				case 'activated_memory':
+				case 'messages':
 					if (response !== null) {
-						handleActivatedMemory(response);
+						handleMessageRetrievedMemory(response);
 					}
 					break;
 				default:

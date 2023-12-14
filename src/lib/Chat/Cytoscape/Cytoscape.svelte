@@ -6,7 +6,6 @@
   import type { Core } from 'cytoscape';
   let cy: Core;
   let container: HTMLElement;
-  let unsubscribeAll: () => void;
 
   export let backendUrl: string;
   export let name: string;
@@ -34,7 +33,7 @@
     cy = initializeBasicCytoscape(container);
   });
 
-  // 異なるnameが渡されると、ノードとエッジの描画を更新
+  // 異なるnameが渡されると、Neo4jからデータを取得し、ノードとエッジを描画
   $: if (name !== previousName) {
   previousName = name;
   (async () => {
@@ -43,15 +42,10 @@
 }
 
   $: if (edges && edges.length > 0) {
+    cy.elements().remove(); // 既存の描画を削除
     drawNodesAndEdges([], edges, cy, "circle");  // or "grid", "random"
   }
 
-  // ページを離れるとき、監視を解除
-  onDestroy(() => {
-    if (unsubscribeAll) {
-      unsubscribeAll();
-    }
-  });
 
 </script>
 <div class="w-64 h-64 bg-gray-100">

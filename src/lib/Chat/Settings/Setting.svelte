@@ -8,7 +8,6 @@
     // メニュー全体の表示
     let showMenu = false;
     let activeMenu = "";
-    let showSubMenu = false;
 
     function toggleMenu() {
         showMenu = !showMenu;

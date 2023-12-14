@@ -8,7 +8,7 @@
     let pageTitle = "home";
 
     // Cytoscape
-    import Cytoscape from '$lib/Chat/Cytoscape/Memory/CytoscapeMemory.svelte';
+    import CyMemory from '$lib/Chat/Cytoscape/Memory/CytoscapeMemory.svelte';
     import CyMessage from '$lib/Chat/Cytoscape/Message/CytoscapeMessage.svelte';
 
 </script>
@@ -22,5 +22,5 @@
 
 <div class="absolute top-16 left-16 flex justify-between space-x-8 lg:space-x-10 -z-20">    
     <CyMessage {backendUrl} />
-    <Cytoscape {backendUrl} />
+    <CyMemory />
 </div>

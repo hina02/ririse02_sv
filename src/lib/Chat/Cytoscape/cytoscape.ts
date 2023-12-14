@@ -33,64 +33,68 @@ export function initializeBasicCytoscape(container: HTMLElement): Core {
   });
 }
 
+
 export function drawNodesAndEdges(nodes: NodeSchemaType[], relationships: RelationshipsSchemaType[], cy: cytoscape.Core, layoutName: string) {
-  const cytoscapeData = {
-    nodes: [],
-    edges: []
-  };
+  // 新しいノードとエッジを保持する配列
+  const newNodes = [];
+  const newEdges = [];
 
   // ノードのデータを作成
   nodes.forEach(node => {
-    cytoscapeData.nodes.push({
-      data: {
-        id: node.name,
-        label: node.label,
-        ...node.properties
-      }
-    });
+    if (cy.getElementById(node.name).empty()) {
+      newNodes.push({
+        group: 'nodes',
+        data: {
+          id: node.name,
+          label: node.label,
+          ...node.properties
+        }
+      });
+    }
   });
 
   // エッジのデータを作成
   relationships.forEach(relationship => {
-    // sourceとtargetのノードが存在するか確認
-    const sourceNodeExists = cytoscapeData.nodes.some(node => node.data.id === relationship.start_node);
-    const targetNodeExists = cytoscapeData.nodes.some(node => node.data.id === relationship.end_node);
+    const sourceId = relationship.start_node;
+    const targetId = relationship.end_node;
+    const edgeId = sourceId + "->" + targetId;
 
-    // sourceノードが存在しない場合、作成
-    if (!sourceNodeExists) {
-      cytoscapeData.nodes.push({
+    // 始点ノードが存在しない場合、作成
+    if (cy.getElementById(sourceId).empty()) {
+      newNodes.push({
+        group: 'nodes',
         data: {
-          id: relationship.start_node,
-          name: relationship.start_node, // 仮のname
-          label: 'Unknown', // 仮のlabel
+          id: sourceId,
+          label: 'Unknown', // 仮のラベル
         }
       });
     }
-
-    // targetノードが存在しない場合、作成
-    if (!targetNodeExists) {
-      cytoscapeData.nodes.push({
+    // 終点ノードが存在しない場合、作成
+    if (cy.getElementById(targetId).empty()) {
+      newNodes.push({
+        group: 'nodes',
         data: {
-          id: relationship.end_node,
-          name: relationship.end_node, // 仮のname
-          label: 'Unknown', // 仮のlabel
+          id: targetId,
+          label: 'Unknown', // 仮のラベル
         }
       });
     }
-
-    // エッジを作成 
-    cytoscapeData.edges.push({
-      data: {
-        id: relationship.start_node + "->" + relationship.end_node,
-        source: relationship.start_node,
-        target: relationship.end_node,
-        label: relationship.type
-      }
-    });
+    // エッジが存在しない場合、作成
+    if (cy.getElementById(edgeId).empty()) {
+      newEdges.push({
+        group: 'edges',
+        data: {
+          id: edgeId,
+          source: sourceId,
+          target: targetId,
+          label: relationship.type
+        }
+      });
+    }
   });
-
-  cy.elements().remove();
-  cy.add(cytoscapeData);
+  // 新しいノードとエッジを追加
+  cy.add([...newNodes, ...newEdges]);
+  // レイアウトの更新
   cy.layout({ name: layoutName }).run();
 }
 
