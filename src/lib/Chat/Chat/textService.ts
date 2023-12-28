@@ -1,3 +1,5 @@
+import { get } from 'svelte/store';
+import { withVoice } from '$lib/Chat/Chat/Store';
 type CallbackType = (char: string) => void;
 
 export default {
@@ -10,7 +12,8 @@ export default {
 
             callback(char === '\n' ? "\n" : char);
 
-            setTimeout(() => this.addCharacter(text, type, callback), 500);
+            if (get(withVoice)) {
+            setTimeout(() => this.addCharacter(text, type, callback), 500);}
         }
     }
 };

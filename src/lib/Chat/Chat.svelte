@@ -5,7 +5,7 @@
 	import audioService from './Chat/audioService';
 	import { handleShortMemory, handleMessageRetrievedMemory } from '$lib/Chat/Cytoscape/Memory/memoryService';
 	// import hljs from '../../css/my-highlight.js'
-	import { Titles, activeTitle, user, AI } from './Chat/Store';
+	import { Titles, activeTitle, user, AI, withVoice } from './Chat/Store';
 	import { createTitle, getTitles } from './Settings/History/getChatHistory';
 	let selectedTitle: string;	// タイトルの選択
 	let scrollContainer: HTMLElement;	// メッセージ表示欄のDOM要素
@@ -67,6 +67,7 @@
 							source: $user,	// 仮のsource。Assistantも受け取るようにする。
 							input_text: inputText,
 							title: $activeTitle,
+							with_voice: $withVoice,
 							};				
 				socket.send(JSON.stringify(data));
 				// 変数の初期化
@@ -87,7 +88,11 @@
 			switch (response.type) {
 				case 'audio':
 					audioService.handleAudioData(response);
-					responseText += response.text + "\n";	// レスポンスメッセージ欄にテキストを表示
+					responseText += response.text + "\n";	// 音声に合わせた速度でレスポンスメッセージ欄にテキストを表示
+					break;
+				case 'text':
+					console.log(response.text);
+					responseText += response.text;			// レスポンスメッセージ欄にテキストを表示（音声無しでチャンクごとに返す場合は、responseMessageに直接渡す）
 					break;
 				case 'image':
 					handleImageData(response);

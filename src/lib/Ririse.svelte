@@ -1,4 +1,5 @@
 <script lang="ts">
+import { withVoice } from '$lib/Chat/Chat/Store';
 let showImage = true;
 </script>
 
@@ -16,6 +17,13 @@ let showImage = true;
             visibility
         {:else}
             visibility_off
+        {/if}
+    </button>
+    <button class="material-icons text-blue-300 scale-125 hover:text-blue-400 text-sm" on:click={() => $withVoice = !$withVoice}>
+        {#if $withVoice}
+            volume_up
+        {:else}
+            volume_off
         {/if}
     </button>
 </footer>
