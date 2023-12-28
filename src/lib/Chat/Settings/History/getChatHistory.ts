@@ -22,7 +22,13 @@ export async function createTitle(backendUrl: string, title: string) {
         alert("予約語はタイトルとして使用できません。");
         return;
     }
-    const response = await fetch(`${backendUrl}/chat_wb/create_and_update_title?title=${title}`);
+    const response = await fetch(`${backendUrl}/chat_wb/create_and_update_title`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title: title })
+    });    
     if (response.ok) {
         updateTitles(backendUrl);
         return;
@@ -37,7 +43,7 @@ export async function getMessages(backendUrl: string, title: string) {
         // messagesをmessageのリストとして、parse
         const validatedMessages = messages.map((message: any) => {
             message.user_input_entity = [JSON.parse(message.user_input_entity)];
-            message.create_time = new Date(message.create_time);
+            message.create_time = message.create_time.toString();
             return MessageSchema.parse(message);
         });
         Messages.update(allMessages => {

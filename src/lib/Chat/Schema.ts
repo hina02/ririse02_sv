@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const NodeSchema = z.object({
   label: z.string(),
   name: z.string(),
-  properties: z.record(z.any()).optional()
+  properties: z.record(z.any()).nullable().optional()
 });
 
 export const RelationshipsSchema = z.object({
@@ -27,7 +27,7 @@ export const MessageSchema = z.object({
   AI: z.string().nullable().optional(),
   ai_response: z.string(),
   user_input_entity: z.array(TripletsSchema),
-  create_time: z.date()
+  create_time: z.string().transform((str) => new Date(str))
 });
 
 export type NodeSchemaType = z.infer<typeof NodeSchema>;

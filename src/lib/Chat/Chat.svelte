@@ -96,13 +96,13 @@
 					handleCodeData(response);
 					break;
 				case 'close':
-					if (response !== null) {
+					if (response) {
 						handleShortMemory(response);
 						socket.close();
 					}
 					break;
 				case 'messages':
-					if (response !== null) {
+					if (response) {
 						handleMessageRetrievedMemory(response);
 					}
 					break;
