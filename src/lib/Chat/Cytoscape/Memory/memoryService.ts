@@ -1,5 +1,5 @@
 import { TripletsSchema } from '$lib/Chat/Schema.js';
-import { ShortMemory, MessageRetrievedMemory, RetrievedMessages } from './Store.js';
+import { ShortMemory, RetrievedMemory } from './Store.js';
 
 // update and store ShortMemory
 export async function handleShortMemory( response: { short_memory: string }) {
@@ -9,15 +9,10 @@ export async function handleShortMemory( response: { short_memory: string }) {
     console.log(validatedData);
 }
 
-// update and store MessageRetrievedMemory
-export async function handleMessageRetrievedMemory(response: { message_retrieved_memory: string, messages: string }) {
-    const parsedMessages = JSON.parse(response.messages);
-    const validatedMessages = TripletsSchema.parse(parsedMessages);
-    RetrievedMessages.set(validatedMessages.nodes);
-    console.log(validatedMessages);
-
-    const parsedMessageRetrievedMemory = JSON.parse(response.message_retrieved_memory);
-    const validatedMessageRetrievedMemory = TripletsSchema.parse(parsedMessageRetrievedMemory);
-    MessageRetrievedMemory.set(validatedMessageRetrievedMemory);
-    console.log(validatedMessageRetrievedMemory);
+// update and store RetrievedMemory
+export async function handleRetrievedMemory(response: { retrieved_memory: string }) {
+    const parsedRetrievedMemory = JSON.parse(response.retrieved_memory);
+    const validatedRetrievedMemory = TripletsSchema.parse(parsedRetrievedMemory);
+    RetrievedMemory.set(validatedRetrievedMemory);
+    console.log(validatedRetrievedMemory);
 }

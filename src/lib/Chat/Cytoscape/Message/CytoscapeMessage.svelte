@@ -4,7 +4,6 @@
   import { updateMessageNodes, updateMessageEdges } from './getMessage';
   import { initializeBasicCytoscape, drawNodesAndEdges, activateColor } from '../cytoscape';
   import { activeTitle } from '$lib/Chat/Chat/Store';
-  import { RetrievedMessages } from '$lib/Chat/Cytoscape/Memory/Store';
   import type { Core } from 'cytoscape';
 
   let cy: Core;
@@ -62,13 +61,6 @@
       'line-color': '#ccc',
       'target-arrow-color': '#ccc'
     });
-    // 該当するノードとエッジの色を変更
-    // activateColor($MessageMemory, cy);
-  }
-    // MessageMemoryのデータが更新されたとき、該当するノードとエッジの色を変更　未完成
-    $: if ($RetrievedMessages) {
-    console.log("MessageMemory", $RetrievedMessages);
-    changeColor();
   }
 
   </script>

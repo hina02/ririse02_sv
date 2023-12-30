@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { ShortMemory, MessageRetrievedMemory } from './Store';
+  import { ShortMemory, RetrievedMemory } from './Store';
   import { initializeBasicCytoscape, drawNodesAndEdges, activateColor } from '../cytoscape';
   import type { Core } from 'cytoscape';
 
   let cy: Core;
   let container: HTMLElement;
   let unsubscribeAll: () => void;
-  let unsubscribeMessageRetrievedMemory; 
+  let unsubscribeRetrievedMemory; 
 
 
   // ストアのShortMemoryの変更を監視し、ノードとエッジを描画
@@ -38,10 +38,10 @@
 
 
 
-  // MessageRetrievedMemoryのデータが更新されたとき、該当するノードとエッジの色を変更
+  // RetrievedMemoryのデータが更新されたとき、該当するノードとエッジの色を変更
   function drawActivatedMemory() {
     // ...
-    unsubscribeMessageRetrievedMemory = MessageRetrievedMemory.subscribe(memory => {
+    unsubscribeRetrievedMemory = RetrievedMemory.subscribe(memory => {
       if (memory && memory.nodes && memory.relationships) {
         // 全てのノードとエッジの色をデフォルトに戻す
         cy.style().selector('node').style({
@@ -60,8 +60,8 @@
     });
   }
 
-  // MessageRetrievedMemoryが更新されたとき、該当するノードとエッジの色を変更
-  $: if (MessageRetrievedMemory) {
+  // RetrievedMemoryが更新されたとき、該当するノードとエッジの色を変更
+  $: if (RetrievedMemory) {
     drawActivatedMemory();
   }
 

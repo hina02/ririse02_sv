@@ -42,7 +42,9 @@ export async function getMessages(backendUrl: string, title: string) {
         const messages = await fetch(`${backendUrl}/chat_wb/get_messages?title=${title}`).then(r => r.json());
         // messagesをmessageのリストとして、parse
         const validatedMessages = messages.map((message: any) => {
-            message.user_input_entity = [JSON.parse(message.user_input_entity)];
+            if (message.user_input_entity !== undefined) {
+                message.user_input_entity = [JSON.parse(message.user_input_entity)];
+            }    
             message.create_time = message.create_time.toString();
             return MessageSchema.parse(message);
         });

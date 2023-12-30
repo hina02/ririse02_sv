@@ -3,7 +3,7 @@
 	import websocketService from './Chat/websocketService';
 	import textService from './Chat/textService';
 	import audioService from './Chat/audioService';
-	import { handleShortMemory, handleMessageRetrievedMemory } from '$lib/Chat/Cytoscape/Memory/memoryService';
+	import { handleShortMemory, handleRetrievedMemory } from '$lib/Chat/Cytoscape/Memory/memoryService';
 	// import hljs from '../../css/my-highlight.js'
 	import { Titles, activeTitle, user, AI, withVoice } from './Chat/Store';
 	import { createTitle, getTitles } from './Settings/History/getChatHistory';
@@ -91,7 +91,6 @@
 					responseText += response.text + "\n";	// 音声に合わせた速度でレスポンスメッセージ欄にテキストを表示
 					break;
 				case 'text':
-					console.log(response.text);
 					responseText += response.text;			// レスポンスメッセージ欄にテキストを表示（音声無しでチャンクごとに返す場合は、responseMessageに直接渡す）
 					break;
 				case 'image':
@@ -106,9 +105,9 @@
 						socket.close();
 					}
 					break;
-				case 'messages':
+				case 'retrieved_memory':
 					if (response) {
-						handleMessageRetrievedMemory(response);
+						handleRetrievedMemory(response);
 					}
 					break;
 				default:
