@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { MessageNodes, MessageRelationships } from './Store';
-  import { updateMessageNodes, updateMessageEdges } from './getMessage';
+  import { getLatestMessages } from './getMessage';
   import { initializeBasicCytoscape, drawNodesAndEdges, activateColor } from '../cytoscape';
   import { activeTitle } from '$lib/Chat/Chat/Store';
   import type { Core } from 'cytoscape';
@@ -34,8 +34,7 @@
 
   // Titleを指定すると、message nodes, edgesを更新
   $: if ($activeTitle && $activeTitle !== "new") {
-    updateMessageNodes(backendUrl, $activeTitle);
-    updateMessageEdges(backendUrl, $activeTitle);
+    getLatestMessages(backendUrl, $activeTitle);
   }
 
   // ページを離れるとき、ストアの購読を解除
@@ -68,7 +67,7 @@
     <p class="flex justify-center px-4">Message Node</p>
     <div bind:this={container} class="h-full"></div>
     <div class="flex justify-center space-x-6">
-      <button on:click={async () => { await updateMessageNodes(backendUrl, $activeTitle); await updateMessageEdges(backendUrl, $activeTitle); }} class="btn-default">update messages</button>
+      <button on:click={async () => { await getLatestMessages(backendUrl, $activeTitle); }} class="btn-default">update messages</button>
     </div>
   </div>
   

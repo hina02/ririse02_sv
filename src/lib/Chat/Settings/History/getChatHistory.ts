@@ -44,8 +44,7 @@ export async function getMessages(backendUrl: string, title: string) {
         const validatedMessages = messages.map((message: any) => {
             if (message.user_input_entity !== undefined) {
                 message.user_input_entity = [JSON.parse(message.user_input_entity)];
-            }    
-            message.create_time = message.create_time.toString();
+            }
             return MessageSchema.parse(message);
         });
         Messages.update(allMessages => {
