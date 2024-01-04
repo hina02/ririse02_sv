@@ -2,13 +2,14 @@
   import { createEventDispatcher } from 'svelte';
   import { onMount, onDestroy } from 'svelte';
   import { initializeBasicCytoscape, drawNodesAndEdges } from './cytoscape';
-  import type { RelationshipsSchemaType } from '$lib/Chat/Schema';
+  import type { TripletsSchemaType, RelationshipsSchemaType } from '$lib/Chat/Schema';
   import type { Core } from 'cytoscape';
   let cy: Core;
   let container: HTMLElement;
 
   export let backendUrl: string;
   export let name: string;
+  let triplets: TripletsSchemaType;
   let edges: RelationshipsSchemaType[];
   let previousName: string;
   const dispatch = createEventDispatcher();
@@ -17,14 +18,17 @@
   async function fetchEdges() {
     const label = "Person";
 
-    edges = await fetch(`${backendUrl}/chat_wb/get_node_relationships/${label}/${name}`).then(r => r.json());
-    if (edges && edges.length > 0) {
-      drawNodesAndEdges([], edges, cy, "circle");  // or "grid", "random"
-      dispatch('edges', true);
-    }
-    else {
-      cy = initializeBasicCytoscape(container);
-      dispatch('edges', false);
+    triplets = await fetch(`${backendUrl}/chat_wb/get_node_relationships/${name}`).then(r => r.json());
+    if (triplets) {
+      edges = triplets.relationships;
+      if (edges && edges.length > 0) {
+        drawNodesAndEdges([], edges, cy, "circle");  // or "grid", "random"
+        dispatch('edges', true);
+      }
+      else {
+        cy = initializeBasicCytoscape(container);
+        dispatch('edges', false);
+      }
     }
   }
 

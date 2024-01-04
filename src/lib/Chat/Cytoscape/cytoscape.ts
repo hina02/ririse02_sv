@@ -47,6 +47,7 @@ export function drawNodesAndEdges(nodes: NodeSchemaType[], relationships: Relati
         data: {
           id: node.name,
           label: node.label,
+          color: node.label === 'Message' ? 'pink' : 'blue', // ラベルが"Message"の場合はピンク、それ以外は青
           ...node.properties
         }
       });
@@ -56,7 +57,9 @@ export function drawNodesAndEdges(nodes: NodeSchemaType[], relationships: Relati
   // エッジのデータを作成
   relationships.forEach(relationship => {
     const sourceId = relationship.start_node;
+    const sourceLabel = relationship.start_node_label;
     const targetId = relationship.end_node;
+    const targetLabel = relationship.end_node_label;
     const edgeId = sourceId + "->" + targetId;
 
     // 始点ノードが存在しない場合、作成
@@ -65,7 +68,7 @@ export function drawNodesAndEdges(nodes: NodeSchemaType[], relationships: Relati
         group: 'nodes',
         data: {
           id: sourceId,
-          label: 'Unknown', // 仮のラベル
+          label: sourceLabel ?? 'Unknown', // 仮のラベル
         }
       });
     }
@@ -75,7 +78,7 @@ export function drawNodesAndEdges(nodes: NodeSchemaType[], relationships: Relati
         group: 'nodes',
         data: {
           id: targetId,
-          label: 'Unknown', // 仮のラベル
+          label: targetLabel ?? 'Unknown', // 仮のラベル
         }
       });
     }

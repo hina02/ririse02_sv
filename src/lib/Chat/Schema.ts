@@ -24,9 +24,9 @@ export const MessageSchema = z.object({
 	id: z.number(),
 	source: z.string(),
   user_input: z.string(),
-  AI: z.string().nullable().optional(),
+  AI: z.string(),
   ai_response: z.string(),
-  user_input_entity: z.array(TripletsSchema).optional(),
+  user_input_entity: z.array(TripletsSchema).nullable().optional(),
   create_time: z.string().transform((str) => new Date(str))
 });
 
