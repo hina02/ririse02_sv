@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { activeThread } from '../Thread/Store.ts';
-  import { activeAssistants, AssistantProfiles } from '../Assistant/Store.ts';
-  import { systemMessage, errorMessage } from './SystemMessageStore.ts';
-  import { createMessage, createRun, createMessageAndRun, updateMessages } from './getMessage.ts';
-  import { writable, get } from 'svelte/store';
-  export let backendUrl: string;
-  let messageText: string = '';
-  let selectedAssistantId: string;
+  import { onMount } from 'svelte'
+  import { activeThread } from '$lib/Thread/Thread/Store'
+  import { activeAssistants, AssistantProfiles } from '$lib/Thread/Assistant/Store'
+  import { systemMessage, errorMessage } from './SystemMessageStore'
+  import { createMessage, createRun, createMessageAndRun, updateMessages } from './getMessage'
+  import { writable, get } from 'svelte/store'
+  export let backendUrl: string
+  let messageText: string = ''
+  let selectedAssistantId: string
 
   function removeAssistant(assistant_id: string) {
-  $activeAssistants = $activeAssistants.filter(id => id !== assistant_id);
-  selectedAssistantId = '';
+    $activeAssistants = $activeAssistants.filter((id) => id !== assistant_id)
+    selectedAssistantId = ''
   }
 </script>
 
@@ -21,7 +21,7 @@
     <!-- システムメッセージ欄 -->
     <div class="grid grid-cols-3 justify-top">
       <div class="flex space-x-4">
-        <p>System: </p>
+        <p>System:</p>
       </div>
       <div class="col-span-2">
         <p class="text-sm text-gray-500">{$systemMessage}</p>
@@ -31,7 +31,8 @@
     <!-- メッセージ入力欄 -->
     <textarea
       bind:value={messageText}
-      class="h-1/2 w-full textarea-default px-3 py-2 text-sm" placeholder="Type your message here"
+      class="h-1/2 w-full textarea-default px-3 py-2 text-sm"
+      placeholder="Type your message here"
     ></textarea>
   </div>
 
@@ -44,7 +45,7 @@
             class="rounded-full object-cover h-6 w-6 border-2 border-blue-900"
             class:border-blue-900={selectedAssistantId !== assistant_id}
             class:border-green-500={selectedAssistantId === assistant_id}
-            on:click={() => selectedAssistantId = assistant_id}
+            on:click={() => (selectedAssistantId = assistant_id)}
           >
             <img
               src={`/assistants/${assistant_id}/icon.png`}
@@ -57,9 +58,13 @@
       <!-- remove icon -->
       <div class="text-gray-400 text-center col-span-1">
         {#if $activeAssistants.length > 0}
-        <button class="material-symbols-outlined" title="remove assistant" on:click={() => removeAssistant(selectedAssistantId)}>
-          remove
-        </button> 
+          <button
+            class="material-symbols-outlined"
+            title="remove assistant"
+            on:click={() => removeAssistant(selectedAssistantId)}
+          >
+            remove
+          </button>
         {/if}
       </div>
     </div>
@@ -71,10 +76,15 @@
       <!-- メッセージ送信／Run実行ボタン -->
       <div class="flex justify-center space-x-2">
         <button on:click={() => createMessage(backendUrl, messageText)}>
-          <span class="material-symbols-outlined text-gray-400 text-center hover:text-blue-400" title="stack Message">stacks</span>
+          <span
+            class="material-symbols-outlined text-gray-400 text-center hover:text-blue-400"
+            title="stack Message">stacks</span
+          >
         </button>
         <button on:click={() => createRun(backendUrl, selectedAssistantId)}>
-          <span class="material-icons base_icon text-gray-400 text-center" title="Run">play_arrow</span>
+          <span class="material-icons base_icon text-gray-400 text-center" title="Run"
+            >play_arrow</span
+          >
         </button>
       </div>
     </div>

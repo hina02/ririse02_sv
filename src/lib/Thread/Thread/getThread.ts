@@ -1,6 +1,6 @@
 import { get } from 'svelte/store'; // 追加: ストアの現在の値を取得するため
 import type { ThreadSchemaType, ThreadSettingSchemaType } from './Schema.ts';
-import { Threads, Tags, activeThread} from './Store.ts';
+import { Threads, Tags, activeThread} from './Store';
 
 // Function to get the list of threads from Store
 export async function getThreads(backendUrl: string) {

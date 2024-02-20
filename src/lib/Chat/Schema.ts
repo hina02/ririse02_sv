@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const NodeSchema = z.object({
   label: z.string(),
   name: z.string(),
-  properties: z.record(z.any()).nullable().optional()
+  properties: z.record(z.any()).nullable().optional(),
 });
 
 export const RelationshipsSchema = z.object({
@@ -12,22 +12,32 @@ export const RelationshipsSchema = z.object({
   end_node: z.string(),
   properties: z.record(z.any()).nullable().optional(),
   start_node_label: z.string().nullable().optional(),
-  end_node_label: z.string().nullable().optional()
+  end_node_label: z.string().nullable().optional(),
 });
 
 export const TripletsSchema = z.object({
   nodes: z.array(NodeSchema),
-  relationships: z.array(RelationshipsSchema)
+  relationships: z.array(RelationshipsSchema),
 });
 
 export const MessageSchema = z.object({
-	id: z.number(),
-	source: z.string(),
-  user_input: z.string(),
-  AI: z.string(),
-  ai_response: z.string(),
-  user_input_entity: z.array(TripletsSchema).nullable().optional(),
-  create_time: z.string().transform((str) => new Date(str))
+  id: z.number(),
+  timestamp: z.string().transform((str) => new Date(str)),
+  speaker: z.string(),
+  message: z.string(),
+});
+export const TopicSchema = z.object({
+  id: z.string(), // primary key
+  timestamp: z.string().transform((str) => new Date(str)),
+  summary: z.string(),
+  participants: z.array(z.string()),
+  messages: z.array(MessageSchema),
+});
+export const SceneSchema = z.object({
+  id: z.string(), // primary key
+  timestamp: z.string().transform((str) => new Date(str)),
+  summary: z.string(),
+  topics: z.array(TopicSchema),
 });
 
 export type NodeSchemaType = z.infer<typeof NodeSchema>;

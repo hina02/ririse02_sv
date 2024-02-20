@@ -1,62 +1,61 @@
 <script lang="ts">
-  import InputTextForm from '$lib/Utils/InputTextForm.svelte';
-  import ListForm from '$lib/Utils/ListForm.svelte';
-  import DictForm from '$lib/Utils/DictForm.svelte';
-  import Modal from 'svelte-simple-modal';
-  import ResponseModal from '$lib/Utils/ResponseModal.svelte';
-  import { NodeSchema } from './Schema';
-  export let backendUrl: string;
-  let promise: Promise<any>;
-  let name: string = "";
-  let name_variation: string[] = [];
-  let speech_pattern: string[] = [];
-  let properties = {};
+  import InputTextForm from '$lib/Utils/InputTextForm.svelte'
+  import ListForm from '$lib/Utils/ListForm.svelte'
+  import DictForm from '$lib/Utils/DictForm.svelte'
+  import Modal from 'svelte-simple-modal'
+  import ResponseModal from '$lib/Utils/ResponseModal.svelte'
+  import { NodeSchema } from './Schema'
+  export let backendUrl: string
+  let promise: Promise<any>
+  let name: string = ''
+  let name_variation: string[] = []
+  let speech_pattern: string[] = []
+  let properties = {}
 
   async function updateCharacter() {
     // request
-    let new_properties = { 
-      ...properties, 
-      ...(name_variation.length > 0 ? { "name_variation": name_variation } : {}), 
-      ...(speech_pattern.length > 0 ? { "speech_pattern": speech_pattern } : {}) 
-    };
+    let new_properties = {
+      ...properties,
+      ...(name_variation.length > 0 ? { name_variation: name_variation } : {}),
+      ...(speech_pattern.length > 0 ? { speech_pattern: speech_pattern } : {}),
+    }
 
-    let NodeData = NodeSchema.parse({label: "Person", name: name, properties: new_properties});
-    promise = fetch(`${backendUrl}/chat_wb/create_update_node`,
-    {
+    let NodeData = NodeSchema.parse({ label: 'Person', name: name, properties: new_properties })
+    promise = fetch(`${backendUrl}/chat_wb/create_update_node`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(NodeData),
-    }).then(response => {
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-    
-    // reset
-    name = "";
-    name_variation = [];
-    speech_pattern = [];
-    properties = {};
-
-    // display response
-    return response.json().then(data => {
-      try {
-        const validatedData = NodeSchema.parse(data);
-        return validatedData;
-      } catch (error) {
-        // check message
-        try {
-          if (data.status === false) {
-          throw new Error(data.message);
-        }
-        return data.message;
-        } catch (error) {
-          throw new Error(`${error}`);
-        }
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`)
       }
-    });
-    });
+
+      // reset
+      name = ''
+      name_variation = []
+      speech_pattern = []
+      properties = {}
+
+      // display response
+      return response.json().then((data) => {
+        try {
+          const validatedData = NodeSchema.parse(data)
+          return validatedData
+        } catch (error) {
+          // check message
+          try {
+            if (data.status === false) {
+              throw new Error(data.message)
+            }
+            return data.message
+          } catch (error) {
+            throw new Error(`${error}`)
+          }
+        }
+      })
+    })
   }
 </script>
 
@@ -67,26 +66,26 @@
       <div class="grid grid-cols-6">
         <p class="text-xs flex items-center">name</p>
         <div class="col-span-5">
-          <InputTextForm bind:inputText={name} placeholder={"Input Name"} />
+          <InputTextForm bind:inputText={name} placeholder={'Input Name'} />
         </div>
       </div>
       <div class="grid grid-cols-6">
         <p class="text-xs col-span-1 flex items-center">name variation</p>
         <div class="col-span-5">
           <ListForm bind:list={name_variation} />
-        </div>          
+        </div>
       </div>
       <div class="grid grid-cols-6">
         <p class="text-xs flex items-center">speech pattern</p>
         <div class="col-span-5">
           <ListForm bind:list={speech_pattern} />
-        </div>  
+        </div>
       </div>
       <div class="grid grid-cols-6">
         <p class="text-xs flex items-center">properties</p>
         <div class="col-span-5">
           <DictForm bind:dict={properties} />
-        </div>  
+        </div>
       </div>
     </Modal>
   </div>
@@ -96,6 +95,6 @@
       {#if promise}
         <ResponseModal {promise} />
       {/if}
-    </div>  
+    </div>
   </div>
 </div>
