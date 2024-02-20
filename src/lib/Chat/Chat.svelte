@@ -8,15 +8,15 @@
     handleRetrievedMemory,
   } from '$lib/Chat/Cytoscape/Memory/memoryService'
   // import hljs from '../../css/my-highlight.js'
-  import { Titles, activeTitle, user, AI, withVoice } from './Chat/Store'
-  import { createTitle, getTitles } from './Settings/History/getChatHistory'
-  let selectedTitle: string // タイトルの選択
+  import { Scenes, activeScene, user, AI, withVoice } from './Store'
+  import { createScene, getScenes } from './Settings/History/getChatHistory'
+  let selectedScene: string // タイトルの選択
   let scrollContainer: HTMLElement // メッセージ表示欄のDOM要素
 
   export let backendUrl: string
   let socket: WebSocket
 
-  let NewTitle: string = '' // 新規タイトルの入力
+  let NewScene: string = '' // 新規タイトルの入力
   let systemMessage: string = 'System: '
   let inputText: string = '' // 入力文字
 
@@ -25,12 +25,12 @@
   let codeMessages: string[] = [] //　コードの表示
   let index: number = 0
 
-  // create title
-  async function createNewTitle(title: string) {
-    await createTitle(backendUrl, title)
-    activeTitle.set(title)
-    selectedTitle = title
-    NewTitle = ''
+  // create scene
+  async function createNewScene(scene: string) {
+    await createScene(backendUrl, scene)
+    activeScene.set(scene)
+    selectedScene = scene
+    NewScene = ''
   }
 
   // type imageの画像指示を処理する関数
@@ -52,9 +52,9 @@
   }
 
   function sendMessage(): void {
-    // activeTitleがない場合、送信しない
-    if (!$activeTitle || $activeTitle === 'new') {
-      systemMessage = 'System: Titleを選択してください。'
+    // activeSceneがない場合、送信しない
+    if (!$activeScene || $activeScene === 'new') {
+      systemMessage = 'System: Sceneを選択してください。'
       return
     }
 
@@ -68,7 +68,7 @@
           AI: $AI,
           source: $user, // 仮のsource。Assistantも受け取るようにする。
           user_input: inputText,
-          title: $activeTitle,
+          scene: $activeScene,
           with_voice: $withVoice,
         }
         socket.send(JSON.stringify(data))
@@ -85,10 +85,7 @@
   }
 
   // WebSocketからのメッセージをハンドリング
-  function handleWebSocketMessage(response: {
-    [key: string]: any
-    type: string
-  }): void {
+  function handleWebSocketMessage(response: { [key: string]: any; type: string }): void {
     try {
       switch (response.type) {
         case 'audio':
@@ -132,7 +129,7 @@
 
   onMount(() => {
     // タイトルの取得
-    getTitles(backendUrl)
+    getScenes(backendUrl)
     // ハイライトの適用
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block)
@@ -141,50 +138,41 @@
 </script>
 
 <div class="h-1/4 sm:h-1/3 max-w-4xl min-w-screen w-full fixed bottom-0">
-  <!-- title -->
-  <div
-    class="absolute bottom-full w-full mb-2 grid grid-cols-3 items-center h-6"
-  >
-    <!-- Selected Title -->
+  <!-- scene -->
+  <div class="absolute bottom-full w-full mb-2 grid grid-cols-3 items-center h-6">
+    <!-- Selected Scene -->
     <div class="col-start-2 justify-self-center">
       <select
-        bind:value={selectedTitle}
-        on:change={() => activeTitle.set(selectedTitle)}
+        bind:value={selectedScene}
+        on:change={() => activeScene.set(selectedScene)}
         class="text-center overflow-y-scroll"
       >
-        <option disabled selected value> -- Titleを選択してください -- </option>
-        <option value="new">新規タイトルを追加...</option>
-        {#each $Titles as title}
-          <option value={title} selected={$activeTitle === title}
-            >{title}</option
+        <option disabled selected value> -- Sceneを選択してください -- </option>
+        <option value="new">新規シーンを追加...</option>
+        {#each $Scenes as scene}
+          <option value={scene.id} selected={$activeScene === scene.id}
+            >{scene.timestamp.toLocaleString()}</option
           >
         {/each}
       </select>
     </div>
-    <!-- New Title -->
-    {#if selectedTitle === 'new'}
-      <div
-        class="col-start-3 justify-self-start flex justify-center items-center"
-      >
+    <!-- New Scene -->
+    {#if selectedScene === 'new'}
+      <div class="col-start-3 justify-self-start flex justify-center items-center">
         <input
-          bind:value={NewTitle}
+          bind:value={NewScene}
           type="text"
-          placeholder="New Title..."
+          placeholder="New Scene..."
           class="w-11/12 border-2 rounded border-blue-300 focus:border-black"
         />
-        <button
-          on:click={() => createNewTitle(NewTitle)}
-          class="ml-2 border-blue-300"
-        >
+        <button on:click={() => createNewScene(NewScene)} class="ml-2 border-blue-300">
           <span class="material-icons base_icon text-sm"> add </span>
         </button>
       </div>
     {/if}
   </div>
   <!-- message container -->
-  <div
-    class="h-full px-4 py-2 bg-sky-50 opacity-95 text-center text-gray-500 lg:left-72"
-  >
+  <div class="h-full px-4 py-2 bg-sky-50 opacity-95 text-center text-gray-500 lg:left-72">
     <div class="h-full flex flex-col">
       <div class="flex-none">
         <div class="flex justify-center">
@@ -194,10 +182,7 @@
             placeholder="Type something..."
             class="w-11/12 p-2 border-2 rounded border-blue-300 focus:border-black"
           />
-          <button
-            on:click={sendMessage}
-            class="ml-4 px-2 center hover:border-b-2 border-blue-300"
-          >
+          <button on:click={sendMessage} class="ml-4 px-2 center hover:border-b-2 border-blue-300">
             <span class="material-icons base_icon"> chat </span>
           </button>
         </div>

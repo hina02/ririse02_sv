@@ -18,7 +18,7 @@
   async function fetchEdges() {
     const label = 'Person'
 
-    triplets = await fetch(`${backendUrl}/chat_wb/get_node_relationships/${name}`).then((r) =>
+    triplets = await fetch(`${backendUrl}/chat/get_node_relationships/${name}`).then((r) =>
       r.json()
     )
     if (triplets) {

@@ -1,5 +1,5 @@
 import { get } from 'svelte/store'
-import { withVoice } from '$lib/Chat/Chat/Store'
+import { withVoice } from '$lib/Chat/Store'
 type CallbackType = (char: string) => void
 
 export default {

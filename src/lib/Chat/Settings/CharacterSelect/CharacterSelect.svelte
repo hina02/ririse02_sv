@@ -4,7 +4,7 @@
   import Modal from 'svelte-simple-modal'
   import ResponseModal from '$lib/Utils/ResponseModal.svelte'
   import type { NodeSchemaType } from '$lib/Chat/Schema'
-  import { user, AI } from '$lib/Chat/Chat/Store'
+  import { user, AI } from '$lib/Chat/Store'
   export let backendUrl: string
   let promise: Promise<any>
   let showEdges = false
@@ -15,7 +15,7 @@
   async function fetchNode() {
     const label = 'Person'
     selectedName = name
-    node = await fetch(`${backendUrl}/chat_wb/get_node/${label}/${name}`).then((r) => r.json())
+    node = await fetch(`${backendUrl}/chat/get_node/${label}/${name}`).then((r) => r.json())
   }
 
   async function handleEdges(event: CustomEvent) {

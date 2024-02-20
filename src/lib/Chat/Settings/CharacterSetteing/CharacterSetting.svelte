@@ -21,7 +21,7 @@
     }
 
     let NodeData = NodeSchema.parse({ label: 'Person', name: name, properties: new_properties })
-    promise = fetch(`${backendUrl}/chat_wb/create_update_node`, {
+    promise = fetch(`${backendUrl}/chat/create_update_node`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

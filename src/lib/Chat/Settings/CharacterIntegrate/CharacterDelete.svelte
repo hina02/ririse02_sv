@@ -9,7 +9,7 @@
   let name = ''
   async function deleteCharacter() {
     let label = 'Person'
-    promise = fetch(`${backendUrl}/chat_wb/delete_node/${label}/${name}`, {
+    promise = fetch(`${backendUrl}/chat/delete_node/${label}/${name}`, {
       method: 'DELETE',
     }).then((response) => {
       if (!response.ok) {

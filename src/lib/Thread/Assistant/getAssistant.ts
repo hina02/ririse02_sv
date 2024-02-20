@@ -16,7 +16,7 @@ export async function getAssistants(backendUrl: string) {
 // Function to update the list of assistants
 export async function updateAssistants(backendUrl: string) {
   let assistants: AssistantSchemaType[] = await fetch(
-    `${backendUrl}/openai_api/get_assistants`
+    `${backendUrl}/assistant/get_assistants`
   ).then((r) => r.json())
   console.log(`assistants: ${JSON.stringify(assistants, null, 2)}`)
   Assistants.set(assistants)
@@ -31,7 +31,7 @@ export async function getAssistant(backendUrl: string, assistant_id: string): Pr
 
   // ストアにAssistantProfilesがない場合、バックエンドから指定Assistantに関連するAssistantProfilesを取得
   if (!currentAssistantProfile) {
-    const assistant = await fetch(`${backendUrl}/openai_api/get_assistant/${assistant_id}`).then(
+    const assistant = await fetch(`${backendUrl}/assistant/get_assistant/${assistant_id}`).then(
       (r) => r.json()
     )
 
@@ -57,7 +57,7 @@ export async function createAssistant(
   data: AssistantSettingSchemaType
 ): Promise<any> {
   console.log(`data: ${JSON.stringify(data, null, 2)}`)
-  const response = await fetch(`${backendUrl}/openai_api/create_assistant`, {
+  const response = await fetch(`${backendUrl}/assistant/create_assistant`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export async function updateAssistant(
   data: AssistantSettingSchemaType
 ): Promise<any> {
   console.log(`data: ${JSON.stringify(data, null, 2)}`)
-  const response = await fetch(`${backendUrl}/openai_api/update_assistant/${assistant_id}`, {
+  const response = await fetch(`${backendUrl}/assistant/update_assistant/${assistant_id}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export async function updateAssistant(
 
 // Function to delete an assistant
 export async function deleteAssistant(backendUrl: string, assistant_id: string): Promise<any> {
-  const response = await fetch(`${backendUrl}/openai_api/delete_assistant/${assistant_id}`, {
+  const response = await fetch(`${backendUrl}/assistant/delete_assistant/${assistant_id}`, {
     method: 'DELETE',
   })
   if (!response.ok) {

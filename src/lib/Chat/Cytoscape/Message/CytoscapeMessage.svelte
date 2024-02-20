@@ -3,7 +3,7 @@
   import { MessageNodes, MessageRelationships } from './Store'
   import { getLatestMessages } from './getMessage'
   import { initializeBasicCytoscape, drawNodesAndEdges, activateColor } from '../cytoscape'
-  import { activeTitle } from '$lib/Chat/Chat/Store'
+  import { activeScene } from '$lib/Chat/Store'
   import type { Core } from 'cytoscape'
 
   let cy: Core
@@ -32,9 +32,9 @@
     drawMessages()
   })
 
-  // Titleを指定すると、message nodes, edgesを更新
-  $: if ($activeTitle && $activeTitle !== 'new') {
-    getLatestMessages(backendUrl, $activeTitle)
+  // Sceneを指定すると、message nodes, edgesを更新
+  $: if ($activeScene && $activeScene !== 'new') {
+    getLatestMessages(backendUrl, $activeScene)
   }
 
   // ページを離れるとき、ストアの購読を解除
@@ -68,7 +68,7 @@
   <div class="flex justify-center space-x-6">
     <button
       on:click={async () => {
-        await getLatestMessages(backendUrl, $activeTitle)
+        await getLatestMessages(backendUrl, $activeScene)
       }}
       class="btn-default">update messages</button
     >

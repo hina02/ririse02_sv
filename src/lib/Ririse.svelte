@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { withVoice } from '$lib/Chat/Chat/Store'
+  import { withVoice } from '$lib/Chat/Store'
   let showImage = true
 </script>
 

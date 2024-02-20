@@ -16,7 +16,7 @@ export async function getFiles(backendUrl: string) {
 
 // Function to get the list of files
 async function updateFiles(backendUrl: string) {
-  const files: FileSchemaType[] = await fetch(`${backendUrl}/openai_api/get_files`).then((r) =>
+  const files: FileSchemaType[] = await fetch(`${backendUrl}/assistant/get_files`).then((r) =>
     r.json()
   )
   // Convert UNIX timestamp to Date object
@@ -40,7 +40,7 @@ export async function uploadFiles(backendUrl: string, files: FileList) {
     formData.append('files', files[i])
   }
 
-  const response = await fetch(`${backendUrl}/openai_api/upload_files`, {
+  const response = await fetch(`${backendUrl}/assistant/upload_files`, {
     method: 'POST',
     body: formData,
   })
@@ -57,7 +57,7 @@ export async function uploadFiles(backendUrl: string, files: FileList) {
 
 // delete file
 export async function deleteFile(backendUrl: string, file_id: string) {
-  const response = await fetch(`${backendUrl}/openai_api/delete_file/${file_id}`, {
+  const response = await fetch(`${backendUrl}/assistant/delete_file/${file_id}`, {
     method: 'DELETE',
   })
   if (response.ok) {

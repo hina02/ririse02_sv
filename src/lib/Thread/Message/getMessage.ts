@@ -42,7 +42,7 @@ export async function getMessages(backendUrl: string) {
 //get /get_messages/{thread_id}
 export async function updateMessages(backendUrl: string) {
   const thread_id = get(activeThread).thread_id // ストアからthread_idを取得
-  const messages = await fetch(`${backendUrl}/openai_api/get_messages/${thread_id}`).then((r) =>
+  const messages = await fetch(`${backendUrl}/assistant/get_messages/${thread_id}`).then((r) =>
     r.json()
   )
   // Convert UNIX timestamp to Date object
@@ -68,7 +68,7 @@ export async function createMessage(backendUrl: string, content: string) {
   }
   const selectedThread = activeThreadValue.thread_id // 現在のthread_idを取得
   const response = await fetch(
-    `${backendUrl}/openai_api/create_message/${selectedThread}?content=${encodeURIComponent(
+    `${backendUrl}/assistant/create_message/${selectedThread}?content=${encodeURIComponent(
       content
     )}`,
     {
@@ -114,7 +114,7 @@ export async function createMessageAndRun(
   }
   const selectedThread = activeThreadValue.thread_id
   const response = await fetch(
-    `${backendUrl}/openai_api/create_message_and_run/${selectedThread}/${assistant_id}?content=${encodeURIComponent(
+    `${backendUrl}/assistant/create_message_and_run/${selectedThread}/${assistant_id}?content=${encodeURIComponent(
       content
     )}`,
     {
@@ -136,7 +136,7 @@ export async function cycleRetrieveRun(backendUrl: string) {
     return
   }
   const selectedThread = activeThreadValue.thread_id
-  const response = await fetch(`${backendUrl}/openai_api/cycle_retrieve_run/${selectedThread}`)
+  const response = await fetch(`${backendUrl}/assistant/cycle_retrieve_run/${selectedThread}`)
   if (response.ok) {
     const responseData = await response.json()
     systemMessage.set(responseData)

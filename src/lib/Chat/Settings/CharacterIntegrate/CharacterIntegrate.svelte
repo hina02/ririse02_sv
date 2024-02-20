@@ -17,7 +17,7 @@
 
     let body = JSON.stringify({ node1: node1, node2: node2 })
     console.log(body)
-    promise = fetch(`${backendUrl}/chat_wb/integrate_nodes`, {
+    promise = fetch(`${backendUrl}/chat/integrate_nodes`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
