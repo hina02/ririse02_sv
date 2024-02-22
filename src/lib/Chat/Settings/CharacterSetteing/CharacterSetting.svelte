@@ -14,13 +14,19 @@
 
   async function updateCharacter() {
     // request
+    const listproperties: { [key: string]: string[] } = {}
+    for (const [key, value] of Object.entries(properties)) {
+      listproperties[key] = [value as string] // 文字列をリストに変換して格納
+    }
+
     let new_properties = {
-      ...properties,
+      ...listproperties,
       ...(name_variation.length > 0 ? { name_variation: name_variation } : {}),
       ...(speech_pattern.length > 0 ? { speech_pattern: speech_pattern } : {}),
     }
 
     let NodeData = NodeSchema.parse({ label: 'Person', name: name, properties: new_properties })
+    console.log(new_properties)
     promise = fetch(`${backendUrl}/chat/create_update_node`, {
       method: 'POST',
       headers: {

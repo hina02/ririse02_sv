@@ -12,28 +12,16 @@
   let name1 = ''
   let name2 = ''
   async function integrateCharacter() {
-    let node1 = NodeSchema.parse({ label: 'Person', name: name1, properties: null })
-    let node2 = NodeSchema.parse({ label: 'Person', name: name2, properties: null })
-
-    let body = JSON.stringify({ node1: node1, node2: node2 })
-    console.log(body)
-    promise = fetch(`${backendUrl}/chat/integrate_nodes`, {
+    promise = fetch(`${backendUrl}/chat/integrate_nodes/Person/${name1}/Person/${name2}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ node1: node1, node2: node2 }),
     }).then((response) => {
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`)
       }
-      // display response
-      return response.json().then((data) => {
-        if (data.status === false) {
-          throw new Error(data.message)
-        }
-        return data.message
-      })
+      return
     })
   }
 </script>

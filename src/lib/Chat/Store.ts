@@ -9,8 +9,17 @@ export const Scenes = writable<InferSchema<typeof SceneSchema>[]>([])
 export const Topics = writable<{ [sceneId: string]: InferSchema<typeof TopicSchema>[] }>({})
 export const Messages = writable<{ [topicId: string]: InferSchema<typeof MessageSchema>[] }>({})
 
+// History
 export const activeScene = writable<string | null>(null)
 export const activeTopic = writable<string | null>(null)
-export const user = writable<string>('彩澄しゅお')
-export const AI = writable<string>('彩澄りりせ')
+
+// Chat
+export const currentScene = writable<string | null>(null)
+
+// Topic
+export const currentCharacters = writable<string[]>([])
+export const setCharacters = writable<string[]>(['彩澄しゅお', '彩澄りりせ'])
 export const withVoice = writable<boolean>(true)
+
+// Message
+export const Player = writable<string>('彩澄しゅお')

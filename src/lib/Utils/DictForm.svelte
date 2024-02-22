@@ -57,7 +57,7 @@
   <div class="flex flex-col mt-2 space-y-0.5">
     {#each Object.entries(dict) as [key, value]}
       <div class="flex items-center">
-        <span class="p-2 border rounded-lg bg-blue-200 text-blue-900">{key}: {value}</span>
+        <span class="p-2 border rounded-lg bg-blue-200 text-blue-900">{key}: {[value]}</span>
         <button on:click={() => removeDictItem(key)} class="ml-2">
           <span
             class="material-symbols-outlined text-gray-400 text-sm items-end hover:text-blue-400"

@@ -1,83 +1,59 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import websocketService from './Chat/websocketService'
   import textService from './Chat/textService'
   import audioService from './Chat/audioService'
-  import {
-    handleShortMemory,
-    handleRetrievedMemory,
-  } from '$lib/Chat/Cytoscape/Memory/memoryService'
-  // import hljs from '../../css/my-highlight.js'
-  import { Scenes, activeScene, user, AI, withVoice } from './Store'
-  import { createScene, getScenes } from './Settings/History/getChatHistory'
-  let selectedScene: string // タイトルの選択
+  import SceneSelector from '$lib/Chat/Chat/SceneSelector.svelte'
+  import { currentScene, Player, setCharacters, withVoice } from './Store'
+
+  let selectedScene: string // シーンの選択
   let scrollContainer: HTMLElement // メッセージ表示欄のDOM要素
 
   export let backendUrl: string
   let socket: WebSocket
 
-  let NewScene: string = '' // 新規タイトルの入力
   let systemMessage: string = 'System: '
   let inputText: string = '' // 入力文字
-
   let responseText: string = '' //　addCharacter: レスポンスのストリーム表示
-  let responseMessages: string = `${$AI}: `
-  let codeMessages: string[] = [] //　コードの表示
-  let index: number = 0
+  let responseMessages: string = `${$setCharacters}: `
 
-  // create scene
-  async function createNewScene(scene: string) {
-    await createScene(backendUrl, scene)
-    activeScene.set(scene)
-    selectedScene = scene
-    NewScene = ''
-  }
-
-  // type imageの画像指示を処理する関数
-  function handleImageData(response: { emote: string }) {
-    console.log(response.emote)
-  }
-
-  // type codeのコード指示を処理する関数
-  function handleCodeData(response: { code: string }) {
-    codeMessages = [...codeMessages, response.code]
-
-    // コードブロックのハイライトを適用
-    setTimeout(() => {
-      document.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightBlock(block)
-      })
-    }, 0) // setTimeoutを使用して、DOMが更新された後にハイライトを適用する
-    console.log(response.code)
-  }
-
-  function sendMessage(): void {
-    // activeSceneがない場合、送信しない
-    if (!$activeScene || $activeScene === 'new') {
-      systemMessage = 'System: Sceneを選択してください。'
-      return
+  // TopicSettingsのデータを送信
+  function sendTopicSettings() {
+    const message = {
+      type: 'topicSettings',
+      data: {
+        scene_id: $currentScene,
+        characters: $setCharacters,
+      },
     }
+    socket.send(JSON.stringify(message))
+  }
 
+  // PlayerMessageのデータを送信
+  function sendPlayerMessage() {
+    const message = {
+      type: 'playerMessage',
+      data: {
+        player: $Player,
+        player_message: inputText,
+        with_voice: $withVoice,
+      },
+    }
+    socket.send(JSON.stringify(message))
+    // 変数の初期化
+    responseMessages = `${$setCharacters}: `
+    inputText = ''
+  }
+
+  function openSocket() {
     socket = websocketService.connect(backendUrl, {
       onOpen: (event: Event) => {
-        // メッセージの送信
-        systemMessage = 'System: WebSocketが開かれました。'
-
-        const data = {
-          user: $user,
-          AI: $AI,
-          source: $user, // 仮のsource。Assistantも受け取るようにする。
-          user_input: inputText,
-          scene: $activeScene,
-          with_voice: $withVoice,
-        }
-        socket.send(JSON.stringify(data))
-        // 変数の初期化
-        responseMessages = `${$AI}: `
-        codeMessages = []
-        inputText = ''
+        systemMessage = 'System: WebSocketが開きました。'
       },
-      onMessage: handleWebSocketMessage,
+    })
+  }
+
+  function closeSocket() {
+    socket = websocketService.connect(backendUrl, {
       onClose: (event: CloseEvent) => {
         systemMessage = 'System: WebSocketが閉じました。'
       },
@@ -95,23 +71,6 @@
         case 'text':
           responseText += response.text // レスポンスメッセージ欄にテキストを表示（音声無しでチャンクごとに返す場合は、responseMessageに直接渡す）
           break
-        case 'image':
-          handleImageData(response)
-          break
-        case 'code':
-          handleCodeData(response)
-          break
-        case 'close':
-          if (response) {
-            handleShortMemory(response)
-            socket.close()
-          }
-          break
-        case 'retrieved_memory':
-          if (response) {
-            handleRetrievedMemory(response)
-          }
-          break
         default:
           console.error('Unknown message type:', response.type)
       }
@@ -126,51 +85,11 @@
       responseMessages += char
     })
   }
-
-  onMount(() => {
-    // タイトルの取得
-    getScenes(backendUrl)
-    // ハイライトの適用
-    document.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  })
 </script>
 
 <div class="h-1/4 sm:h-1/3 max-w-4xl min-w-screen w-full fixed bottom-0">
-  <!-- scene -->
-  <div class="absolute bottom-full w-full mb-2 grid grid-cols-3 items-center h-6">
-    <!-- Selected Scene -->
-    <div class="col-start-2 justify-self-center">
-      <select
-        bind:value={selectedScene}
-        on:change={() => activeScene.set(selectedScene)}
-        class="text-center overflow-y-scroll"
-      >
-        <option disabled selected value> -- Sceneを選択してください -- </option>
-        <option value="new">新規シーンを追加...</option>
-        {#each $Scenes as scene}
-          <option value={scene.id} selected={$activeScene === scene.id}
-            >{scene.timestamp.toLocaleString()}</option
-          >
-        {/each}
-      </select>
-    </div>
-    <!-- New Scene -->
-    {#if selectedScene === 'new'}
-      <div class="col-start-3 justify-self-start flex justify-center items-center">
-        <input
-          bind:value={NewScene}
-          type="text"
-          placeholder="New Scene..."
-          class="w-11/12 border-2 rounded border-blue-300 focus:border-black"
-        />
-        <button on:click={() => createNewScene(NewScene)} class="ml-2 border-blue-300">
-          <span class="material-icons base_icon text-sm"> add </span>
-        </button>
-      </div>
-    {/if}
-  </div>
+  <SceneSelector {backendUrl} bind:selectedScene />
+
   <!-- message container -->
   <div class="h-full px-4 py-2 bg-sky-50 opacity-95 text-center text-gray-500 lg:left-72">
     <div class="h-full flex flex-col">
@@ -196,14 +115,6 @@
       >
         <!-- response  の表示 -->
         {responseMessages + `\n`}
-        <!-- code blockの表示 -->
-        {#each codeMessages as code}
-          <div class="mx-6 mb-6 md:mx-10 border-2 border-gray-400">
-            <pre><code>
-						{code}
-					</code></pre>
-          </div>
-        {/each}
         {`\n\n`}
       </div>
     </div>
