@@ -1,8 +1,8 @@
 # About this repository
-- LLMの長期記憶として、Knowledge Graphを利用しようと試みたプロジェクトのバックエンドです。
-- 概要については、バックエンドレポジトリを参照してください。
+- LLMの長期記憶として、Knowledge Graphを利用しようと試みたプロジェクトのフロントエンドです。
+- 概要については、[こちら](https://github.com/hina02/ririse02)のバックエンドレポジトリを参照してください。
 - 実行には、.envファイルが必要です。  
-VITE_BACKEND_URL=http://127.0.0.1:8000を設定してください。
+'VITE_BACKEND_URL=http://127.0.0.1:8000'を設定してください。
 - 開発環境での実行しか確認していないため、'npm install', 'npm run dev'で実行してください。  
 
 # 初期設定
